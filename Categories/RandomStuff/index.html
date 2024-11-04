@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="eng">
+<head>
+    <meta charset="UTF-8">
+    <title>Neural Net in API :D </title>
+    <link rel="stylesheet" href="css/style.css">
+</html>
+<body>
+    <input type="file" id="imageInput" accept="image/*">
+    <button onclick="uploadImage()">classify</button>
+    <p>Click the button to get the prediction</p>
+    <p id="result"></p>
+    <script type="text/javascript">
+        async function uploadImage(){
+            const input = document.getElementById('imageInput');
+            if(!input.files[0]){
+                return alert('Please select an image');
+            }
+
+            const file = input.files[0];
+            const formData = new FormData();
+            formData.append('file', file);
+
+            try {
+                const response = await fetch('http://localhost:5000/predict-image', {
+                    method: 'POST',
+                    body: formData
+                });
+                const result = await response.json();
+                document.getElementById('result').textContent = 'result: ${result.prediction}'; 
+            }catch(error){
+                console.error(error);
+            }
+        }
+    </script>
+</body>
+</html>
